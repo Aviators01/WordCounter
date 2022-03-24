@@ -1,0 +1,18 @@
+The critical part of the algorithm was found to be a problem with the else if condition. I had originally put:
+else if(!isdigit(ch) && !iscontrol(ch) && !ispunct(ch)) which meant execute this if character is not a digit
+AND not a control character AND not a punctuation. This meant that the digits, controls, and punctuation
+would be excluded but the else if would never execute until the file reached the end. In other words,
+one huge line of words would finally be pushed back into the string vector.
+
+To fix this, we made the &&'s into ||'s and took away the not. This then read: execute else if code section
+if character is a digit, control, or punctuation. However, this was also a problem because if I had two spaces
+like as in this (  ), the first iteration would clear string w and then would on the second iteration try to
+add an empty string w thus potentially resulting in an error (technically, there was no error. Instead, it added
+the space and counted it as a word which is clearly inaccurate). To fix this, I had to use a bool variable that
+would turn to true while building the string. Once a non-alphabet character was encountered, it would allow
+the else if condition to execute, thereby adding string w to the string vector. Afterwards, everything would
+be reset while the bool variable was turned to false. Thus, if algorithm encountered a second space, the if
+statement would not execute as it was a non-alphabet, and the else if statement would not execute as the bool
+variable was set to false. The else if statement would only execute if bool variable was set to true and the
+bool variable would only be set to true once another letter was encountered. Thus, this last change mitigated
+the problem of a second space, control, or punctuation character.
